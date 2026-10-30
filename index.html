@@ -1,0 +1,2820 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>The Next Layer of Intelligence</title>
+    <meta name="description" content="A unified infrastructure platform to help teams build, ship, and scale AI systems with confidence." />
+    <meta property="og:title" content="The Next Layer of Intelligence" />
+    <meta property="og:description" content="A unified infrastructure platform to help teams build, ship, and scale AI systems with confidence." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Manrope (variable 200..800) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+
+    <style>
+      /* ════════════════════════════════════════
+         RESET & BASE TOKENS
+         ════════════════════════════════════════ */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: geometricPrecision;
+      }
+
+      :root {
+        --ink: #fafafa;          /* headline / primary text */
+        --muted: #a7a6a6;        /* subcopy */
+        --nav: #b6b5b5;          /* header links */
+        --strip: #8b8a8a;        /* partner logos */
+        --pill: #ffffff;         /* CTA fill */
+        --pill-ink: #050505;     /* CTA text */
+        --stage-bg: #050505;     /* Stage / page black */
+
+        /* Responsive Unit System (Reference canvas: 1487 × 1058) */
+        --u: calc(100vh / 1058);
+        --uw: calc(100vw / 1487);
+        --h: clamp(var(--u), calc(var(--u) * 0.65 + var(--uw) * 0.35), calc(var(--u) * 1.16));
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      @supports (height: 100dvh) {
+        :root {
+          --u: calc(100dvh / 1058);
+        }
+      }
+
+      html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--stage-bg);
+        color: var(--ink);
+        font-family: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      /* Partner logo wordmark font stack approximation */
+      .lg-word {
+        font-family: 'IpsumMark', 'Manrope', sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      /* ════════════════════════════════════════
+         DESKTOP STAGE (Reference: 1487 x 1058)
+         ════════════════════════════════════════ */
+      .stage {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        background: var(--stage-bg);
+      }
+
+      /* Plate & CloudFront Background Video */
+      .plate {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .plate-video {
+        position: absolute;
+        left: 50%;
+        top: calc(1 * var(--u));
+        width: calc(1492 * var(--u));
+        height: calc(1054 * var(--u));
+        transform: translateX(calc(-50% - calc(0.5 * var(--u))));
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      /* Overlays on .plate::after (Both desktop gradients) */
+      .plate::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(to bottom,
+            rgba(5, 5, 5, 0) 78.8%,
+            rgba(5, 5, 5, 0.23) 79.6%,
+            rgba(5, 5, 5, 0.45) 81.4%,
+            rgba(5, 5, 5, 0.75) 83.3%,
+            rgba(5, 5, 5, 0.84) 85.2%,
+            rgba(5, 5, 5, 0.888) 88%,
+            rgba(5, 5, 5, 0.905) 91%,
+            rgba(5, 5, 5, 0.96) 95%,
+            #050505 100%
+          ),
+          linear-gradient(to right,
+            #050505 calc(50% - (746 * var(--u))),
+            transparent calc(50% - (676 * var(--u))),
+            transparent calc(50% + (676 * var(--u))),
+            #050505 calc(50% + (746 * var(--u)))
+          );
+      }
+
+      /* ════════════════════════════════════════
+         TOPBAR & HEADER
+         ════════════════════════════════════════ */
+      .topbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0;
+        z-index: 10;
+      }
+
+      /* Brand Mark (S-like lightning bolt) */
+      .brand {
+        position: absolute;
+        left: calc(75 * var(--u));
+        top: calc(27 * var(--u));
+        width: calc(31.5 * var(--u));
+        height: calc(48.5 * var(--u));
+        display: block;
+        text-decoration: none;
+        outline: none;
+        cursor: pointer;
+        transition: transform 0.25s var(--ease), opacity 0.25s ease;
+      }
+
+      .brand:hover {
+        transform: scale(1.04);
+        opacity: 0.95;
+      }
+
+      .brand svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* Nav Links (.links) */
+      .links {
+        position: absolute;
+        left: 50%;
+        top: calc(51 * var(--u));
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        gap: calc(24.5 * var(--u));
+        white-space: nowrap;
+      }
+
+      .links a {
+        font-size: calc(19.0 * var(--u));
+        font-weight: 400;
+        color: var(--nav);
+        text-decoration: none;
+        transition: color 0.2s ease, opacity 0.2s ease;
+        padding: calc(4 * var(--u)) calc(2 * var(--u));
+        cursor: pointer;
+      }
+
+      .links a:nth-child(3) {
+        margin-left: calc(-1 * var(--u)); /* fine-tune 23.5u gap */
+      }
+      .links a:nth-child(4) {
+        margin-left: calc(1.5 * var(--u)); /* fine-tune 26.0u gap */
+      }
+
+      .links a:hover {
+        color: var(--ink);
+      }
+
+      /* Header Pill (.pill-nav) */
+      .pill-nav {
+        position: absolute;
+        right: calc(75.4 * var(--u));
+        top: calc(27 * var(--u));
+        width: calc(175 * var(--u));
+        height: calc(49 * var(--u));
+        background: var(--pill);
+        border-radius: 999px;
+        color: var(--pill-ink);
+        font-size: calc(20.6 * var(--u));
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.22s var(--ease), background-color 0.2s ease, box-shadow 0.25s ease;
+      }
+
+      .pill-nav span {
+        display: inline-block;
+        transform: translateY(calc(1 * var(--u))); /* optical centering */
+      }
+
+      .pill-nav:hover {
+        transform: scale(1.025);
+        box-shadow: 0 calc(4 * var(--u)) calc(20 * var(--u)) rgba(255, 255, 255, 0.18);
+      }
+
+      /* Mobile Burger (hidden on desktop) */
+      .burger {
+        display: none;
+      }
+
+      /* ════════════════════════════════════════
+         HERO SECTION
+         ════════════════════════════════════════ */
+      .hero {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      .hero .headline,
+      .hero .sub,
+      .hero .actions {
+        pointer-events: auto;
+      }
+
+      /* Headline (.headline) */
+      .headline {
+        position: absolute;
+        left: calc(75.5 * var(--u));
+        top: calc(230.5 * var(--u));
+        font-size: calc(71.6 * var(--h));
+        line-height: calc(80.5 * var(--h));
+        font-weight: 400;
+        letter-spacing: calc(0.3 * var(--h));
+        color: var(--ink);
+        white-space: nowrap;
+      }
+
+      .headline span {
+        display: block;
+      }
+
+      /* Subcopy (.sub) */
+      .sub {
+        position: absolute;
+        left: calc(75.5 * var(--u));
+        top: calc(230.5 * var(--u) + 189.0 * var(--h));
+        font-size: calc(20.7 * var(--h));
+        line-height: calc(23.5 * var(--h));
+        font-weight: 400;
+        word-spacing: calc(1.8 * var(--h));
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .sub span {
+        display: block;
+      }
+
+      /* Actions (.actions) */
+      .actions {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      /* Primary CTA (.pill-cta) */
+      .pill-cta {
+        position: absolute;
+        left: calc(74.9 * var(--u));
+        top: calc(230.5 * var(--u) + 264.5 * var(--h));
+        width: calc(175.6 * var(--h));
+        height: calc(50 * var(--h));
+        font-size: calc(20.6 * var(--h));
+        font-weight: 500;
+        background: var(--pill);
+        border-radius: 999px;
+        color: var(--pill-ink);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: transform 0.22s var(--ease), background-color 0.2s ease, box-shadow 0.25s ease;
+      }
+
+      .pill-cta span {
+        display: inline-block;
+        transform: translateY(calc(1 * var(--h)));
+      }
+
+      .pill-cta:hover {
+        transform: scale(1.025);
+        box-shadow: 0 calc(4 * var(--h)) calc(22 * var(--h)) rgba(255, 255, 255, 0.22);
+      }
+
+      /* Ghost Link (.ghost) */
+      .ghost {
+        position: absolute;
+        left: calc(74.9 * var(--u) + 220.6 * var(--h));
+        top: calc(230.5 * var(--u) + 279.5 * var(--h));
+        font-size: calc(20.6 * var(--h));
+        font-weight: 500;
+        letter-spacing: calc(0.12 * var(--h));
+        color: #ffffff;
+        text-decoration: none;
+        cursor: pointer;
+        pointer-events: auto;
+        white-space: nowrap;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        padding: calc(4 * var(--h)) calc(2 * var(--h));
+      }
+
+      .ghost:hover {
+        opacity: 0.8;
+        transform: translateX(calc(2 * var(--h)));
+      }
+
+      /* ════════════════════════════════════════
+         PARTNER STRIP (.logos)
+         ════════════════════════════════════════ */
+      .logos {
+        position: absolute;
+        width: calc(741 * var(--u));
+        left: 50%;
+        transform: translateX(calc(-50% + 20 * var(--u)));
+        height: calc(50 * var(--u));
+        z-index: 6;
+        color: var(--strip);
+      }
+
+      .lg {
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        opacity: 0.88;
+        transition: opacity 0.25s ease;
+        cursor: default;
+      }
+
+      .lg:hover {
+        opacity: 1;
+        color: #b5b5b5;
+      }
+
+      .lg1 {
+        left: calc(-0.5 * var(--u));
+        top: calc(994.7 * var(--u));
+      }
+      .lg1 .lg-icon {
+        width: calc(30.5 * var(--u));
+        height: calc(31 * var(--u));
+      }
+      .lg1 .lg-word {
+        position: absolute;
+        left: calc(37 * var(--u));
+        top: calc(5.6 * var(--u));
+        font-size: calc(18.1 * var(--u));
+      }
+
+      .lg2 {
+        left: calc(206.5 * var(--u));
+        top: calc(995.7 * var(--u));
+      }
+      .lg2 .lg-icon {
+        width: calc(24.5 * var(--u));
+        height: calc(30 * var(--u));
+      }
+      .lg2 .lg-word {
+        position: absolute;
+        left: calc(31 * var(--u));
+        top: calc(7.3 * var(--u));
+        font-size: calc(18.5 * var(--u));
+      }
+      .lg2 .dot {
+        display: inline-block;
+        width: 0.09em;
+        height: 0.09em;
+        background: currentColor;
+        border-radius: 50%;
+        vertical-align: 0.62em;
+        margin-left: 0.06em;
+      }
+
+      .lg3 {
+        left: calc(416.5 * var(--u));
+        top: calc(996.7 * var(--u));
+      }
+      .lg3 .lg-icon {
+        width: calc(28.5 * var(--u));
+        height: calc(28 * var(--u));
+      }
+      .lg3 .lg-word {
+        position: absolute;
+        left: calc(35 * var(--u));
+        top: calc(7.3 * var(--u));
+        font-size: calc(16.15 * var(--u));
+      }
+
+      .lg4 {
+        left: calc(620.5 * var(--u));
+        top: calc(998.7 * var(--u));
+      }
+      .lg4 .lg-icon {
+        width: calc(28.5 * var(--u));
+        height: calc(25.5 * var(--u));
+      }
+      .lg4 .lg-word {
+        position: absolute;
+        left: calc(37 * var(--u));
+        top: calc(8.3 * var(--u));
+        font-size: calc(15.3 * var(--u));
+      }
+
+      /* ════════════════════════════════════════
+         LIVE TELEMETRY TICKER PILL (Corner)
+         Subtle floating live indicator
+         ════════════════════════════════════════ */
+      .live-telemetry-pill {
+        position: absolute;
+        bottom: calc(22 * var(--u));
+        right: calc(36 * var(--u));
+        z-index: 15;
+        background: rgba(18, 18, 18, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: calc(7 * var(--u)) calc(16 * var(--u));
+        border-radius: 999px;
+        font-size: calc(12.5 * var(--u));
+        color: #d1d1d1;
+        display: flex;
+        align-items: center;
+        gap: calc(8 * var(--u));
+        cursor: pointer;
+        transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .live-telemetry-pill:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.25);
+        background: rgba(25, 25, 25, 0.9);
+      }
+
+      .pulse-dot {
+        width: calc(7 * var(--u));
+        height: calc(7 * var(--u));
+        background: #48bb78;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 8px rgba(72, 187, 120, 0.8);
+        animation: pulseRing 2s infinite ease-in-out;
+      }
+
+      @keyframes pulseRing {
+        0% { transform: scale(0.9); opacity: 0.7; }
+        50% { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(0.9); opacity: 0.7; }
+      }
+
+      /* ════════════════════════════════════════
+         ANIMATIONS (prefers-reduced-motion)
+         ════════════════════════════════════════ */
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(calc(14 * var(--u)));
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes riseNav {
+        from {
+          opacity: 0;
+          transform: translate(-50%, calc(-50% + (14 * var(--u))));
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 0.88;
+        }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .brand, .pill-nav {
+          animation: rise 0.8s var(--ease) both;
+        }
+        .links {
+          animation: riseNav 0.8s var(--ease) both;
+        }
+        .headline {
+          animation: rise 0.9s var(--ease) 0.06s both;
+        }
+        .sub {
+          animation: rise 0.9s var(--ease) 0.14s both;
+        }
+        .pill-cta, .actions .ghost {
+          animation: rise 0.9s var(--ease) 0.22s both;
+        }
+        .lg {
+          animation: fade 1.1s ease 0.34s both;
+        }
+        .live-telemetry-pill {
+          animation: fade 1.2s ease 0.5s both;
+        }
+      }
+
+      /* ════════════════════════════════════════
+         PORTRAIT & MOBILE BEHAVIOR
+         (max-aspect-ratio: 11/10)
+         ════════════════════════════════════════ */
+      .menu {
+        display: none;
+      }
+
+      @media (max-aspect-ratio: 11/10) {
+        :root {
+          --m: min(calc(100vw / 430), 1.34px);
+          --u: var(--m);
+          --h: var(--m);
+        }
+
+        html, body {
+          overflow-y: auto;
+          overflow-x: hidden;
+          height: auto;
+          min-height: 100vh;
+          min-height: 100dvh;
+        }
+
+        .stage {
+          height: auto;
+          min-height: 100vh;
+          min-height: 100dvh;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          padding: calc(24 * var(--m)) calc(24 * var(--m)) calc(40 * var(--m));
+          padding-top: max(calc(24 * var(--m)), env(safe-area-inset-top));
+          padding-bottom: max(calc(40 * var(--m)), env(safe-area-inset-bottom));
+          box-sizing: border-box;
+        }
+
+        .live-telemetry-pill {
+          position: relative;
+          bottom: auto;
+          right: auto;
+          margin-top: calc(20 * var(--m));
+          font-size: calc(12 * var(--m));
+          width: fit-content;
+        }
+
+        /* Portrait Plate Video */
+        .plate {
+          position: fixed;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          transform: none;
+        }
+
+        .plate-video {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          transform: none;
+          object-fit: cover;
+          object-position: 43% center;
+        }
+
+        /* Portrait Overlays */
+        .plate::after {
+          background:
+            linear-gradient(to right,
+              rgba(5, 5, 5, 0.86),
+              rgba(5, 5, 5, 0.66) 42%,
+              rgba(5, 5, 5, 0.20) 78%,
+              rgba(5, 5, 5, 0.10) 100%
+            ),
+            linear-gradient(to bottom,
+              rgba(5, 5, 5, 0.72) 0%,
+              rgba(5, 5, 5, 0.34) 24%,
+              rgba(5, 5, 5, 0.34) 56%,
+              rgba(5, 5, 5, 0.80) 82%,
+              rgba(5, 5, 5, 0.97) 94%,
+              #050505 100%
+            );
+        }
+
+        /* Topbar in portrait */
+        .topbar {
+          position: relative;
+          height: calc(52 * var(--m));
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          z-index: 40;
+        }
+
+        .brand {
+          position: relative;
+          left: auto;
+          top: auto;
+          width: calc(28 * var(--m));
+          height: calc(43 * var(--m));
+        }
+
+        .links,
+        .pill-nav {
+          display: none !important;
+        }
+
+        /* Frosted Burger Button */
+        .burger {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: calc(6 * var(--m));
+          width: calc(50 * var(--m));
+          height: calc(44 * var(--m));
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          border-radius: 999px;
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          cursor: pointer;
+          padding: 0;
+          outline: none;
+          z-index: 50;
+          transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .burger i {
+          display: block;
+          width: calc(18 * var(--m));
+          height: 1.5px;
+          background: #ffffff;
+          border-radius: 1px;
+          transition: transform 0.35s var(--ease), opacity 0.25s ease;
+          transform-origin: center;
+        }
+
+        /* Morph to X */
+        .stage.is-open .burger i:first-child {
+          transform: translateY(calc(3.75 * var(--m))) rotate(45deg);
+        }
+        .stage.is-open .burger i:last-child {
+          transform: translateY(calc(-3.75 * var(--m))) rotate(-45deg);
+        }
+
+        /* Hero in portrait */
+        .hero {
+          position: relative;
+          inset: auto;
+          display: flex;
+          flex-direction: column;
+          margin-top: calc(70 * var(--m));
+          z-index: 10;
+        }
+
+        .headline {
+          position: relative;
+          left: auto;
+          top: auto;
+          font-size: calc(38 * var(--m));
+          line-height: 1.14;
+          white-space: normal;
+          letter-spacing: -0.01em;
+        }
+
+        .headline span {
+          display: inline;
+        }
+        .headline span:first-child::after {
+          content: " ";
+        }
+
+        .sub {
+          position: relative;
+          left: auto;
+          top: auto;
+          margin-top: calc(24 * var(--m));
+          font-size: calc(16 * var(--m));
+          line-height: 1.45;
+          white-space: normal;
+          color: var(--muted);
+          word-spacing: normal;
+        }
+
+        .sub span {
+          display: inline;
+        }
+
+        .actions {
+          position: relative;
+          inset: auto;
+          margin-top: calc(32 * var(--m));
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: calc(16 * var(--m));
+        }
+
+        .pill-cta {
+          position: relative;
+          left: auto;
+          top: auto;
+          width: auto;
+          min-width: calc(170 * var(--m));
+          height: calc(48 * var(--m));
+          padding: 0 calc(28 * var(--m));
+          font-size: calc(16 * var(--m));
+        }
+
+        .ghost {
+          position: relative;
+          left: auto;
+          top: auto;
+          font-size: calc(16 * var(--m));
+          padding: calc(6 * var(--m)) 0;
+        }
+
+        /* Logos in portrait: 2x2 grid */
+        .logos {
+          position: relative;
+          left: auto;
+          top: auto;
+          transform: none;
+          width: 100%;
+          height: auto;
+          margin-top: auto;
+          padding-top: calc(60 * var(--m));
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: calc(24 * var(--m)) calc(16 * var(--m));
+        }
+
+        .lg {
+          position: relative;
+          left: auto !important;
+          top: auto !important;
+          display: flex;
+          align-items: center;
+          gap: calc(10 * var(--m));
+        }
+
+        .lg .lg-word {
+          position: relative !important;
+          left: auto !important;
+          top: auto !important;
+          font-size: calc(15 * var(--m)) !important;
+        }
+
+        .lg .lg-icon {
+          width: calc(24 * var(--m)) !important;
+          height: calc(24 * var(--m)) !important;
+          flex-shrink: 0;
+        }
+
+        /* Mobile Overlay Menu */
+        .menu {
+          display: flex;
+          position: fixed;
+          inset: 0;
+          background: rgba(5, 5, 5, 0.94);
+          backdrop-filter: blur(28px);
+          -webkit-backdrop-filter: blur(28px);
+          z-index: 35;
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition: opacity 0.42s var(--ease), visibility 0.42s var(--ease);
+          flex-direction: column;
+          padding: calc(90 * var(--m)) calc(28 * var(--m)) calc(40 * var(--m));
+          box-sizing: border-box;
+        }
+
+        .stage.is-open .menu {
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
+
+        .menu-inner {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .menu-eyebrow {
+          font-size: calc(12 * var(--m));
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: var(--muted);
+          margin-bottom: calc(24 * var(--m));
+          opacity: 0;
+          transform: translateY(calc(12 * var(--m)));
+          transition: opacity 0.3s ease 0.06s, transform 0.3s ease 0.06s;
+        }
+
+        .menu-list {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: calc(16 * var(--m));
+        }
+
+        .menu-list li {
+          opacity: 0;
+          transform: translateY(calc(14 * var(--m)));
+          transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .menu-list a {
+          font-size: max(calc(24 * var(--m)), 20px);
+          font-weight: 400;
+          color: var(--ink);
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: calc(6 * var(--m)) 0;
+        }
+
+        .menu-list a::after {
+          content: "→";
+          font-size: 0.8em;
+          opacity: 0.35;
+          transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .menu-list a:hover::after {
+          transform: translateX(4px);
+          opacity: 1;
+        }
+
+        .menu-foot {
+          margin-top: auto;
+          display: flex;
+          flex-direction: column;
+          gap: calc(16 * var(--m));
+          padding-top: calc(28 * var(--m));
+          opacity: 0;
+          transform: translateY(calc(14 * var(--m)));
+          transition: opacity 0.35s ease 0.34s, transform 0.35s ease 0.34s;
+        }
+
+        .pill-menu {
+          background: var(--pill);
+          color: var(--pill-ink);
+          font-size: calc(18 * var(--m));
+          font-weight: 500;
+          height: calc(48 * var(--m));
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+        }
+
+        .menu-foot .ghost {
+          text-align: center;
+          font-size: calc(16 * var(--m));
+        }
+
+        /* Staggered entrance when menu is open */
+        .stage.is-open .menu-eyebrow {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .stage.is-open .menu-list li:nth-child(1) {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: 0.10s;
+        }
+        .stage.is-open .menu-list li:nth-child(2) {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: 0.16s;
+        }
+        .stage.is-open .menu-list li:nth-child(3) {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: 0.22s;
+        }
+        .stage.is-open .menu-list li:nth-child(4) {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: 0.28s;
+        }
+        .stage.is-open .menu-foot {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Tablet Band (≥600px AND max-aspect-ratio 11/10) */
+      @media (min-width: 600px) and (max-aspect-ratio: 11/10) {
+        :root {
+          --m: min(calc(100vw / 860), calc(100vh / 760), 1.25px);
+          --u: var(--m);
+          --h: var(--m);
+        }
+
+        .plate-video {
+          object-position: 44% center;
+        }
+
+        .plate::after {
+          background:
+            linear-gradient(to right,
+              rgba(5, 5, 5, 0.84),
+              rgba(5, 5, 5, 0.60) 42%,
+              rgba(5, 5, 5, 0.16) 78%,
+              rgba(5, 5, 5, 0.06) 100%
+            ),
+            linear-gradient(to bottom,
+              rgba(5, 5, 5, 0.66) 0%,
+              rgba(5, 5, 5, 0.28) 24%,
+              rgba(5, 5, 5, 0.30) 56%,
+              rgba(5, 5, 5, 0.78) 82%,
+              rgba(5, 5, 5, 0.96) 94%,
+              #050505 100%
+            );
+        }
+
+        .headline {
+          font-size: calc(52 * var(--m));
+          line-height: 1.12;
+        }
+        .headline span {
+          display: block;
+        }
+        .headline span:first-child::after {
+          content: "";
+        }
+
+        .actions {
+          flex-direction: row;
+          align-items: center;
+          gap: calc(24 * var(--m));
+        }
+
+        .logos {
+          grid-template-columns: repeat(4, 1fr);
+          gap: calc(20 * var(--m));
+        }
+      }
+
+      /* Reduced motion fallback */
+      @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after {
+          animation-duration: 0.001s !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001s !important;
+        }
+      }
+
+      /* ════════════════════════════════════════
+         CINEMATIC MODAL SYSTEM
+         Restrained silver/white, deep blacks, high fidelity
+         ════════════════════════════════════════ */
+      .modal-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(5, 5, 5, 0.88);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        opacity: 0;
+        transition: opacity 0.28s var(--ease);
+      }
+
+      .modal-layer.active {
+        display: flex;
+        opacity: 1;
+      }
+
+      .modal-card {
+        position: relative;
+        width: 100%;
+        max-width: 960px;
+        max-height: 90vh;
+        background: #090909;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        overflow-y: auto;
+        color: var(--ink);
+        box-shadow: 0 28px 72px rgba(0, 0, 0, 0.92);
+        padding: 38px;
+        transform: scale(0.97) translateY(12px);
+        transition: transform 0.28s var(--ease);
+      }
+
+      .modal-layer.active .modal-card {
+        transform: scale(1) translateY(0);
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+        z-index: 20;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: rotate(90deg);
+      }
+
+      .modal-header {
+        margin-bottom: 24px;
+        padding-right: 48px;
+      }
+
+      .modal-tag {
+        display: inline-block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: #8e8e8e;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 4px 12px;
+        border-radius: 999px;
+        margin-bottom: 12px;
+      }
+
+      .modal-title {
+        font-size: 28px;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        line-height: 1.25;
+        color: #ffffff;
+      }
+
+      .modal-subtitle {
+        font-size: 15px;
+        color: var(--muted);
+        margin-top: 8px;
+        line-height: 1.5;
+      }
+
+      /* Navigation Tabs inside Modals */
+      .modal-tabs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 12px;
+        overflow-x: auto;
+      }
+
+      .modal-tab-btn {
+        background: none;
+        border: none;
+        color: #888888;
+        font-size: 13.5px;
+        font-weight: 500;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        font-family: inherit;
+      }
+
+      .modal-tab-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .modal-tab-btn.active {
+        color: #050505;
+        background: #ffffff;
+        font-weight: 600;
+      }
+
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      /* Team member cards */
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 24px 0;
+      }
+
+      .team-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 14px;
+        padding: 22px;
+        position: relative;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+
+      .team-box:hover {
+        border-color: rgba(255, 255, 255, 0.22);
+        transform: translateY(-2px);
+      }
+
+      .team-box-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 12px;
+      }
+
+      .team-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #181818;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #ffffff;
+        font-size: 15px;
+      }
+
+      .team-name {
+        font-size: 17px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      .team-role {
+        font-size: 12.5px;
+        color: #9c9c9c;
+        margin-top: 2px;
+      }
+
+      .team-desc {
+        font-size: 13.5px;
+        color: #cccccc;
+        line-height: 1.55;
+      }
+
+      .mission-banner {
+        background: rgba(255, 255, 255, 0.04);
+        border-left: 3px solid #ffffff;
+        padding: 16px 20px;
+        border-radius: 0 12px 12px 0;
+        margin-top: 20px;
+        font-size: 14.5px;
+        line-height: 1.6;
+        color: #e0e0e0;
+      }
+
+      /* Architecture section styles */
+      .arch-section {
+        margin-bottom: 26px;
+      }
+
+      .arch-heading {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .arch-badge {
+        font-size: 11px;
+        color: #a0a0a0;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 2px 7px;
+        border-radius: 4px;
+      }
+
+      .arch-p {
+        font-size: 13.5px;
+        color: #c0c0c0;
+        line-height: 1.65;
+        margin-bottom: 12px;
+      }
+
+      .arch-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        margin: 12px 0;
+      }
+
+      .arch-list li {
+        font-size: 13.5px;
+        color: #cfcfcf;
+        padding-left: 18px;
+        position: relative;
+        line-height: 1.5;
+      }
+
+      .arch-list li::before {
+        content: "•";
+        position: absolute;
+        left: 4px;
+        color: #ffffff;
+      }
+
+      /* Interactive Simulator Card styling */
+      .simulator-box {
+        background: #0f0f0f;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 22px;
+        margin-top: 20px;
+      }
+
+      .sim-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .sim-field label {
+        display: block;
+        font-size: 11.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #888888;
+        margin-bottom: 6px;
+      }
+
+      .sim-field select,
+      .sim-field input {
+        width: 100%;
+        background: #181818;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        padding: 9px 12px;
+        border-radius: 8px;
+        font-size: 13.5px;
+        font-family: inherit;
+        outline: none;
+      }
+
+      .station-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .station-card {
+        background: #131313;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      .station-card.selected {
+        border-color: #ffffff;
+        background: #1c1c1c;
+      }
+
+      .station-name {
+        font-size: 14.5px;
+        font-weight: 600;
+        color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .station-distance {
+        font-size: 11.5px;
+        color: #8a8a8a;
+      }
+
+      .station-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        margin-top: 7px;
+      }
+
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #48bb78;
+        display: inline-block;
+      }
+      .status-dot.busy { background: #ed8936; }
+      .status-dot.offline { background: #e53e3e; }
+
+      .guns-bar {
+        display: flex;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .gun-pill {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        font-size: 10.5px;
+        padding: 4px;
+        text-align: center;
+        color: #a0a0a0;
+      }
+
+      .gun-pill.free {
+        border-color: rgba(72, 187, 120, 0.4);
+        color: #68d391;
+      }
+
+      .gun-pill.busy {
+        border-color: rgba(237, 137, 54, 0.4);
+        color: #f6ad55;
+      }
+
+      .sim-action-btn {
+        margin-top: 16px;
+        background: #ffffff;
+        color: #050505;
+        border: none;
+        padding: 11px 22px;
+        border-radius: 999px;
+        font-size: 13.5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      .sim-action-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .booking-result {
+        margin-top: 14px;
+        padding: 14px;
+        border-radius: 8px;
+        background: rgba(72, 187, 120, 0.1);
+        border: 1px solid rgba(72, 187, 120, 0.3);
+        color: #c6f6d5;
+        font-size: 13px;
+        line-height: 1.5;
+        display: none;
+      }
+
+      /* ════════════════════════════════════════
+         FEATURE 2: RANGE ANXIETY & CHARGE CALCULATOR
+         ════════════════════════════════════════ */
+      .calc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 16px;
+      }
+
+      .stat-output-card {
+        background: #141414;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .stat-number {
+        font-size: 32px;
+        font-weight: 600;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+      }
+
+      .stat-unit {
+        font-size: 14px;
+        color: var(--muted);
+        font-weight: 400;
+        margin-left: 4px;
+      }
+
+      .slider-wrap {
+        margin: 12px 0 18px;
+      }
+
+      .slider-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12.5px;
+        color: #9e9e9e;
+        margin-bottom: 6px;
+      }
+
+      .custom-range {
+        width: 100%;
+        accent-color: #ffffff;
+        cursor: pointer;
+      }
+
+      /* ════════════════════════════════════════
+         FEATURE 3: LIVE VIRTUAL CHARGING SESSION
+         ════════════════════════════════════════ */
+      .virtual-station {
+        background: #111111;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 24px;
+        margin-top: 16px;
+      }
+
+      .gauge-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin: 18px 0;
+      }
+
+      .battery-container {
+        width: 160px;
+        height: 72px;
+        border: 3px solid rgba(255, 255, 255, 0.4);
+        border-radius: 12px;
+        position: relative;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+      }
+
+      .battery-container::after {
+        content: "";
+        position: absolute;
+        right: -9px;
+        top: 20px;
+        width: 6px;
+        height: 26px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 0 4px 4px 0;
+      }
+
+      .battery-fill {
+        height: 100%;
+        width: 25%;
+        background: linear-gradient(90deg, #38a169, #48bb78);
+        border-radius: 6px;
+        transition: width 0.4s ease;
+      }
+
+      .battery-percent-display {
+        font-size: 34px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      .live-metrics-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .metric-cell {
+        background: #161616;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .metric-label {
+        font-size: 11px;
+        color: #888888;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .metric-val {
+        font-size: 19px;
+        font-weight: 600;
+        color: #ffffff;
+        margin-top: 4px;
+      }
+
+      /* ════════════════════════════════════════
+         FEATURE 4: HIGHWAY ROUTE PLANNER
+         ════════════════════════════════════════ */
+      .route-timeline {
+        position: relative;
+        margin: 20px 0 10px;
+        padding-left: 28px;
+      }
+
+      .route-timeline::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 10px;
+        bottom: 10px;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .timeline-stop {
+        position: relative;
+        margin-bottom: 20px;
+      }
+
+      .timeline-stop::before {
+        content: "";
+        position: absolute;
+        left: -24px;
+        top: 5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ffffff;
+      }
+
+      .timeline-stop.charge::before {
+        background: #48bb78;
+        box-shadow: 0 0 8px rgba(72, 187, 120, 0.8);
+      }
+
+      .stop-title {
+        font-size: 14.5px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      .stop-desc {
+        font-size: 12.5px;
+        color: #9e9e9e;
+        margin-top: 2px;
+      }
+
+      @media (max-width: 640px) {
+        .modal-card {
+          padding: 22px;
+        }
+        .modal-title {
+          font-size: 22px;
+        }
+        .calc-grid, .live-metrics-row {
+          grid-template-columns: 1fr;
+        }
+        .team-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ════════════════════════════════════════
+         STAGE (Reference Canvas: 1487 × 1058)
+         DOM order strictly matching comp:
+         .stage > .plate > header.topbar > nav.menu#menu > main.hero > .logos
+         ════════════════════════════════════════ -->
+    <div class="stage" id="stage">
+      <!-- Full-bleed background video plate -->
+      <div class="plate">
+        <video class="plate-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+          <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_112712_da9d53df-6d27-4b12-bdf6-aa9dc2622bdf.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <!-- Brand SVG (Stylized angular S / lightning bolt with two white notches) -->
+        <a class="brand" href="#" aria-label="Home">
+          <svg viewBox="0 0 31.5 48.5" width="31.5" height="48.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bg1" x1="8" y1="0" x2="34.1" y2="28.9" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#9e9e9e" />
+                <stop offset="0.28" stop-color="#a6a6a6" />
+                <stop offset="0.34" stop-color="#a3a3a3" />
+                <stop offset="0.40" stop-color="#3a3a3a" />
+                <stop offset="0.55" stop-color="#414141" />
+                <stop offset="0.60" stop-color="#7a7a7a" />
+                <stop offset="0.68" stop-color="#8e8e8e" />
+                <stop offset="0.80" stop-color="#a9a9a9" />
+                <stop offset="0.95" stop-color="#c4c4c4" />
+                <stop offset="1" stop-color="#cccccc" />
+              </linearGradient>
+            </defs>
+            <path d="M21.5 0 L21.5 19.5 L31.5 19.5 L31.5 29 L10 48.5 L10 28.5 L0.5 28.5 L0.5 18.5 Z" fill="url(#bg1)" />
+            <rect x="0.5" y="18.5" width="9" height="10" fill="#fdfdfd" />
+            <rect x="22" y="19.5" width="9.5" height="9.5" fill="#fdfdfd" />
+          </svg>
+        </a>
+
+        <!-- Desktop Primary Links -->
+        <nav class="links" aria-label="Primary">
+          <a href="#about" class="nav-item">About</a>
+          <a href="#features" class="nav-item">Features</a>
+          <a href="#faq" class="nav-item">FAQ</a>
+          <a href="#contact" class="nav-item">Contact</a>
+        </nav>
+
+        <!-- Header CTA Pill -->
+        <a href="#get-started" class="pill pill-nav">
+          <span>Get Started</span>
+        </a>
+
+        <!-- Mobile Burger Button -->
+        <button class="burger" id="burger" aria-label="Toggle navigation menu" aria-expanded="false">
+          <i></i>
+          <i></i>
+        </button>
+      </header>
+
+      <!-- Mobile Overlay Menu -->
+      <nav class="menu" id="menu" aria-hidden="true">
+        <div class="menu-inner">
+          <p class="menu-eyebrow">Menu</p>
+          <ul class="menu-list">
+            <li><a href="#about">About</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <div class="menu-foot">
+            <a href="#get-started" class="pill pill-menu"><span>Get Started</span></a>
+            <a href="#architecture" class="ghost">View Architecture</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Hero Content -->
+      <main class="hero">
+        <h1 class="headline">
+          <span>The Next Layer</span>
+          <span>of Intelligence</span>
+        </h1>
+        <p class="sub">
+          <span>A unified infrastructure platform to help teams build,</span>
+          <span>ship, and scale AI systems with confidence.</span>
+        </p>
+        <div class="actions">
+          <a href="#get-started" class="pill pill-cta">
+            <span>Get Started</span>
+          </a>
+          <a href="#architecture" class="ghost">View Architecture</a>
+        </div>
+      </main>
+
+      <!-- Bottom Partner Strip (.logos) -->
+      <div class="logos">
+        <!-- Logo 1 -->
+        <div class="lg lg1">
+          <svg class="lg-icon" viewBox="0 0 30 31" fill="currentColor">
+            <mask id="m1">
+              <rect width="30" height="31" fill="white" />
+              <circle cx="19.5" cy="10.5" r="5.1" fill="black" />
+            </mask>
+            <rect width="30" height="31" rx="6" mask="url(#m1)" />
+            <circle cx="19.5" cy="10.5" r="3.2" />
+          </svg>
+          <span class="lg-word">logoipsum</span>
+        </div>
+
+        <!-- Logo 2 (with tiny raised dot) -->
+        <div class="lg lg2">
+          <svg class="lg-icon" viewBox="0 0 25 30" fill="currentColor">
+            <rect x="0" y="2" width="7" height="26" rx="3.5" />
+            <path d="M12 2 C18 2 24 7 24 15 C24 23 18 28 12 28 Z" />
+          </svg>
+          <span class="lg-word">logoipsum<span class="dot"></span></span>
+        </div>
+
+        <!-- Logo 3 -->
+        <div class="lg lg3">
+          <svg class="lg-icon" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="3.1">
+            <circle cx="14" cy="14" r="12.35" />
+            <path d="M7 14 C10 10 18 10 21 14" stroke-linecap="round" />
+            <path d="M9 19 C12 16 16 16 19 19" stroke-linecap="round" />
+          </svg>
+          <span class="lg-word">logoipsum</span>
+        </div>
+
+        <!-- Logo 4 -->
+        <div class="lg lg4">
+          <svg class="lg-icon" viewBox="0 0 28 25.5" fill="none">
+            <path d="M2 12 C6 5 22 5 26 12 C24 16 20 16 14 16 C8 16 4 16 2 12 Z" fill="currentColor" />
+            <path d="M3 19 C8 17 20 17 25 19" stroke="currentColor" stroke-width="3.05" stroke-linecap="round" />
+            <path d="M5 23.5 C9 22 19 22 23 23.5" stroke="currentColor" stroke-width="3.05" stroke-linecap="round" />
+          </svg>
+          <span class="lg-word">logoipsum</span>
+        </div>
+      </div>
+
+      <!-- Real-time Live Telemetry Floating Pill -->
+      <div class="live-telemetry-pill" id="live-telemetry-pill" title="Click to view Live Grid & Station Telemetry">
+        <span class="pulse-dot"></span>
+        <span id="telemetry-live-text">Live: Bay 3 at Metro Hub Central is now Available • Grid Tariff: $0.22/kWh (Off-Peak)</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         MODALS FOR INTERACTIVE CONTENT
+         (About, Architecture, Features & Live Tools, FAQ, Contact, Get Started)
+         ════════════════════════════════════════ -->
+
+    <!-- Modal 1: About Us — EV Charging Project -->
+    <div class="modal-layer" id="modal-about" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <div class="modal-card">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="modal-header">
+          <div class="modal-tag">Project & Team</div>
+          <h2 class="modal-title" id="about-title">About Us — EV Charging Project</h2>
+          <p class="modal-subtitle">Meet the team behind the innovation dedicated to making electric vehicle charging smarter, accessible, and connected.</p>
+        </div>
+
+        <p class="arch-p">We are a team of passionate developers working towards making electric vehicle charging smarter, more accessible, and more convenient.</p>
+
+        <div class="team-grid">
+          <!-- Pawan Singh -->
+          <div class="team-box">
+            <div class="team-box-header">
+              <div class="team-avatar">PS</div>
+              <div>
+                <div class="team-name">Pawan Singh</div>
+                <div class="team-role">Full Stack Developer</div>
+              </div>
+            </div>
+            <p class="team-desc">B.Tech CSE student passionate about full-stack development, AI integration, and building innovative technology solutions. Focused on developing user-friendly and efficient digital experiences.</p>
+            <div style="margin-top: 14px; font-size: 13px; color: #a0a0a0;">
+              Contact: <a href="mailto:pawan9140582015@gmail.com" style="color: #ffffff; text-decoration: underline;">pawan9140582015@gmail.com</a>
+            </div>
+          </div>
+
+          <!-- Anmol Upadhyay -->
+          <div class="team-box">
+            <div class="team-box-header">
+              <div class="team-avatar">AU</div>
+              <div>
+                <div class="team-name">Anmol Upadhyay</div>
+                <div class="team-role">Team Member & Collaborator</div>
+              </div>
+            </div>
+            <p class="team-desc">A technology enthusiast collaborating on the EV Charging project to help build a reliable, accessible, and user-friendly EV charging experience.</p>
+          </div>
+        </div>
+
+        <div class="mission-banner">
+          <strong style="color: #ffffff; display: block; margin-bottom: 4px;">Our Mission</strong>
+          To simplify EV charging by helping electric vehicle owners discover charging stations and enjoy a smoother, smarter charging experience.
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 2: EV Charging Station Locator & Booking System Architecture -->
+    <div class="modal-layer" id="modal-architecture" role="dialog" aria-modal="true" aria-labelledby="arch-title">
+      <div class="modal-card">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="modal-header">
+          <div class="modal-tag">System Specification</div>
+          <h2 class="modal-title" id="arch-title">EV Charging Station Locator & Booking System</h2>
+          <p class="modal-subtitle">Comprehensive problem statement, operational architecture, and live discovery simulation.</p>
+        </div>
+
+        <!-- Section 1 -->
+        <div class="arch-section">
+          <h3 class="arch-heading"><span class="arch-badge">01</span> Background</h3>
+          <p class="arch-p">The increasing adoption of electric vehicles (EVs) has created a growing demand for easily accessible and efficiently managed charging facilities. Governments, automakers and private companies are encouraging the shift from petrol and diesel vehicles to electric ones in order to reduce pollution and dependence on fossil fuels. As the number of EVs on the road rises, the charging infrastructure that supports them must also become more organized, visible and reliable. However, the growth of charging infrastructure has not been matched by the growth of tools that help people use it. Charging stations are spread across cities and highways, owned by different operators, and often listed on separate platforms or not listed at all. As a result, the experience of charging an EV is still far less convenient than refueling a conventional vehicle.</p>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="arch-section">
+          <h3 class="arch-heading"><span class="arch-badge">02</span> Problems Faced by EV Users</h3>
+          <p class="arch-p">EV users often face difficulties in finding nearby charging stations, knowing the availability of charging points, estimating waiting time, and planning their charging schedules. A driver who arrives at a station may find that all charging points are occupied, out of service, or incompatible with their vehicle's connector type. Since charging takes much longer than refueling, such a situation can lead to long waiting periods and wasted travel. The lack of proper information about charging station availability can lead to inconvenience, unnecessary travel, and longer waiting periods for users. On long journeys, this uncertainty creates "range anxiety", where the driver constantly worries about whether the battery will last until the next working charger. Users also have no simple way to reserve a time slot in advance, compare charging prices, or check the charging speed before reaching a station.</p>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="arch-section">
+          <h3 class="arch-heading"><span class="arch-badge">03</span> Problems Faced by Charging Station Operators</h3>
+          <p class="arch-p">Charging station operators also face challenges in managing multiple users, maintaining charging point availability, and organizing booking records efficiently. Most operators still depend on manual registers, phone calls or walk-in handling, which makes it difficult to track which charging point is in use, which is free and which needs maintenance. During peak hours, operators cannot predict demand, so some stations become overcrowded while others remain idle. The absence of a centralized system creates difficulties in coordinating between EV users and charging service providers. Billing, payment tracking and usage reports are also hard to maintain without a proper digital system, which reduces both efficiency and revenue.</p>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="arch-section">
+          <h3 class="arch-heading"><span class="arch-badge">04</span> Need for the Proposed System</h3>
+          <p class="arch-p">Therefore, there is a need for an efficient software system that addresses the challenges faced by EV users and charging station operators by improving the overall management and accessibility of EV charging services. The proposed EV Charging Station Locator and Booking System focuses on solving these problems and providing a more organized approach for managing electric vehicle charging requirements. The system will act as a common platform where users can search for stations near them, view the status of charging points, book a slot in advance and make payments, while operators can manage their stations, bookings and records from a single place.</p>
+        </div>
+
+        <!-- Section 5 -->
+        <div class="arch-section">
+          <h3 class="arch-heading"><span class="arch-badge">05</span> Main Problems Identified</h3>
+          <ul class="arch-list">
+            <li><strong>Difficulty in finding nearby EV charging stations:</strong> Station information is scattered across different sources and is often incomplete or outdated.</li>
+            <li><strong>Lack of real-time information about charging point availability:</strong> Users cannot tell whether a charger is free, busy or out of order before reaching it.</li>
+            <li><strong>Long waiting time at charging stations during peak hours:</strong> Without advance booking, users queue up at the same stations at the same times.</li>
+            <li><strong>Inefficient utilization of available charging resources:</strong> Some stations are overloaded while others remain unused because demand is not distributed.</li>
+            <li><strong>Challenges in managing charging station operations:</strong> Manual handling of users, charging points and records is slow and error-prone.</li>
+            <li><strong>Lack of proper communication between EV users and charging providers:</strong> There is no direct channel for booking confirmation, updates, cancellations or complaints.</li>
+            <li><strong>Difficulty in planning journeys due to uncertainty of charging availability:</strong> Drivers cannot confidently plan long trips or schedule charging stops.</li>
+            <li><strong>Increasing demand for better EV charging infrastructure management:</strong> Growing EV numbers require scalable, data-driven management of charging services.</li>
+          </ul>
+        </div>
+
+        <!-- Section 6 -->
+        <div class="arch-section">
+          <h3 class="arch-heading"><span class="arch-badge">06</span> Objectives of the Proposed System</h3>
+          <ul class="arch-list">
+            <li>To help EV users locate nearby charging stations quickly using location-based search.</li>
+            <li>To display the real-time availability and status of charging points.</li>
+            <li>To allow users to book charging slots in advance and reduce waiting time.</li>
+            <li>To help operators manage charging points, bookings and user records from a centralized platform.</li>
+            <li>To improve utilization of charging stations by distributing demand across time slots and locations.</li>
+            <li>To enable better communication between EV users and charging service providers.</li>
+            <li>To support journey planning by showing charging options along a route.</li>
+          </ul>
+        </div>
+
+        <!-- Section 7 -->
+        <div class="arch-section">
+          <h3 class="arch-heading"><span class="arch-badge">07</span> Expected Benefits</h3>
+          <p class="arch-p">For EV users, the system will save time and effort, reduce range anxiety and make charging more predictable. For operators, it will provide organized booking records, better control over charging resources and improved revenue through higher utilization. At a larger level, a well-managed charging network will encourage more people to adopt electric vehicles, supporting cleaner and more sustainable transportation.</p>
+        </div>
+
+        <!-- Section 8 -->
+        <div class="arch-section">
+          <h3 class="arch-heading"><span class="arch-badge">08</span> Conclusion</h3>
+          <p class="arch-p">The lack of accessible information, real-time availability and organized booking is a major obstacle to the smooth use of EV charging services. A centralized EV Charging Station Locator and Booking System can bridge the gap between EV users and charging providers, reduce waiting times, improve resource utilization and make electric vehicle ownership more convenient.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 3: Features & Interactive EV Driver Hub -->
+    <div class="modal-layer" id="modal-features" role="dialog" aria-modal="true" aria-labelledby="features-title">
+      <div class="modal-card">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="modal-header">
+          <div class="modal-tag">Interactive Suite</div>
+          <h2 class="modal-title" id="features-title">EV Charging Operating System</h2>
+          <p class="modal-subtitle">Solving the real-world problems EV drivers face: availability uncertainty, range anxiety, connector compatibility, and queue times.</p>
+        </div>
+
+        <!-- Tabbed Interface for Interactive Features -->
+        <div class="modal-tabs">
+          <button class="modal-tab-btn active" data-tab="tab-locator">⚡ Live Station Grid</button>
+          <button class="modal-tab-btn" data-tab="tab-range">🔋 Range & Charge Calculator</button>
+          <button class="modal-tab-btn" data-tab="tab-charger">🔌 Virtual Live Charger</button>
+          <button class="modal-tab-btn" data-tab="tab-route">🗺️ Highway Trip Planner</button>
+          <button class="modal-tab-btn" data-tab="tab-overview">📋 System Core Spec</button>
+        </div>
+
+        <!-- Tab 1: Live Station Grid with Real-Time Telemetry -->
+        <div class="tab-content active" id="tab-locator">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <p style="font-size: 13.5px; color: #a0a0a0;">Live OCPP telemetry: updates streaming every 5 seconds. Real-time gun availability and booking.</p>
+            <span style="font-size: 12px; color: #48bb78; display: inline-flex; align-items: center; gap: 5px;">
+              <span class="status-dot"></span> Live Feed Active
+            </span>
+          </div>
+
+          <div class="sim-controls">
+            <div class="sim-field">
+              <label>Filter by Connector</label>
+              <select id="sim-connector-filter">
+                <option value="all">All Connectors (CCS2, Type 2, CHAdeMO)</option>
+                <option value="ccs2">CCS2 DC Fast (50kW - 150kW)</option>
+                <option value="type2">Type 2 AC (7.4kW - 22kW)</option>
+                <option value="chademo">CHAdeMO DC Fast</option>
+              </select>
+            </div>
+            <div class="sim-field">
+              <label>Sort By</label>
+              <select id="sim-sort">
+                <option value="distance">Shortest Distance</option>
+                <option value="available">Highest Availability</option>
+                <option value="speed">Fastest Charging Speed</option>
+                <option value="tariff">Lowest Tariff ($/kWh)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Dynamic Station Cards -->
+          <div class="station-cards" id="dynamic-station-list">
+            <!-- Rendered via JS for live telemetry -->
+          </div>
+
+          <div style="margin-top: 20px; background: #141414; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 18px;">
+            <h4 style="font-size: 15px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">Advance Slot Reservation</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+              <div class="sim-field">
+                <label>Arrival Window</label>
+                <select id="adv-time">
+                  <option>Immediate (Arriving in 10 mins)</option>
+                  <option>Today, 03:00 PM - 04:00 PM</option>
+                  <option>Today, 05:30 PM - 06:30 PM</option>
+                  <option>Tomorrow Morning, 08:00 AM</option>
+                </select>
+              </div>
+              <div class="sim-field">
+                <label>Vehicle Model</label>
+                <select id="adv-vehicle">
+                  <option>Tata Nexon EV Max (CCS2)</option>
+                  <option>MG ZS EV (CCS2)</option>
+                  <option>Hyundai Ioniq 5 (CCS2 800V)</option>
+                  <option>Tesla Model 3 / Y</option>
+                  <option>BYD Atto 3 (CCS2)</option>
+                  <option>Mahindra XUV400 (CCS2)</option>
+                </select>
+              </div>
+            </div>
+            <button class="sim-action-btn" id="confirm-reservation-btn">Book Stall & Lock Slot</button>
+            <div class="booking-result" id="adv-booking-result"></div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Range Anxiety & Battery Charge Calculator -->
+        <div class="tab-content" id="tab-range">
+          <p style="font-size: 13.5px; color: #a0a0a0; margin-bottom: 16px;">
+            Solves <strong>Range Anxiety</strong>: Real physics calculations based on battery capacity, vehicle motor efficiency, and charger power levels.
+          </p>
+
+          <div class="sim-controls">
+            <div class="sim-field">
+              <label>Select Electric Vehicle</label>
+              <select id="calc-ev-model">
+                <option value="nexon" data-battery="40.5" data-range="437" data-speed="50">Tata Nexon EV Max (40.5 kWh, 437 km)</option>
+                <option value="mg" data-battery="50.3" data-range="461" data-speed="75">MG ZS EV (50.3 kWh, 461 km)</option>
+                <option value="ioniq" data-battery="72.6" data-range="631" data-speed="240">Hyundai Ioniq 5 (72.6 kWh, 631 km)</option>
+                <option value="tesla" data-battery="60.0" data-range="513" data-speed="170">Tesla Model 3 (60 kWh, 513 km)</option>
+                <option value="byd" data-battery="60.5" data-range="521" data-speed="80">BYD Atto 3 (60.5 kWh, 521 km)</option>
+                <option value="xuv" data-battery="39.4" data-range="456" data-speed="50">Mahindra XUV400 (39.4 kWh, 456 km)</option>
+              </select>
+            </div>
+            <div class="sim-field">
+              <label>Current Ambient Condition</label>
+              <select id="calc-temp">
+                <option value="1.0">Normal / Optimal (22°C - 26°C)</option>
+                <option value="0.88">Summer AC Load (38°C - 44°C)</option>
+                <option value="0.82">Cold Weather / Winter (5°C - 10°C)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="slider-wrap">
+            <div class="slider-header">
+              <span>Current Battery State of Charge (SOC)</span>
+              <strong id="soc-current-val" style="color: #ffffff;">18%</strong>
+            </div>
+            <input type="range" min="5" max="95" value="18" class="custom-range" id="soc-current-slider" />
+          </div>
+
+          <div class="slider-wrap">
+            <div class="slider-header">
+              <span>Target Battery State of Charge</span>
+              <strong id="soc-target-val" style="color: #ffffff;">80% (Recommended for Battery Health)</strong>
+            </div>
+            <input type="range" min="20" max="100" value="80" class="custom-range" id="soc-target-slider" />
+          </div>
+
+          <div class="calc-grid">
+            <div class="stat-output-card">
+              <div>
+                <span style="font-size: 11px; text-transform: uppercase; color: #888;">Added Driving Range</span>
+                <div class="stat-number" id="calc-added-km">271<span class="stat-unit">km</span></div>
+              </div>
+              <p style="font-size: 12px; color: #9c9c9c; margin-top: 8px;">Energy required: <span id="calc-kwh-needed" style="color: #fff;">25.1 kWh</span></p>
+            </div>
+
+            <div class="stat-output-card">
+              <div>
+                <span style="font-size: 11px; text-transform: uppercase; color: #888;">Est. Charging Session Cost</span>
+                <div class="stat-number" id="calc-cost">$5.52<span class="stat-unit">USD</span></div>
+              </div>
+              <p style="font-size: 12px; color: #9c9c9c; margin-top: 8px;">CO₂ emissions avoided: <span id="calc-co2" style="color: #48bb78;">38.4 kg</span></p>
+            </div>
+          </div>
+
+          <!-- Time Comparison -->
+          <div style="margin-top: 18px; background: #131313; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 18px;">
+            <h4 style="font-size: 13.5px; font-weight: 600; color: #ffffff; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Charging Time Comparison Across Hardware</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+              <div class="metric-cell">
+                <div class="metric-label">150 kW DC HyperCharger</div>
+                <div class="metric-val" id="time-150kw" style="color: #68d391;">18 mins</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-label">50 kW DC Fast Gun</div>
+                <div class="metric-val" id="time-50kw">32 mins</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-label">22 kW AC Destination</div>
+                <div class="metric-val" id="time-22kw">1 hr 14m</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-label">7.4 kW Home Wallbox</div>
+                <div class="metric-val" id="time-7kw">3 hrs 35m</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Interactive Virtual Charging Station Simulator -->
+        <div class="tab-content" id="tab-charger">
+          <p style="font-size: 13.5px; color: #a0a0a0;">
+            Experience a live virtual charging session. Watch the real-time battery curve, energy accumulator, and telemetry feed.
+          </p>
+
+          <div class="virtual-station">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #888;">Stall #03 • CCS2 DC Fast Gun</span>
+                <h3 style="font-size: 18px; font-weight: 600; color: #ffffff; margin-top: 2px;">Smart Grid Gun Telemetry</h3>
+              </div>
+              <div id="session-badge" style="font-size: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 999px; color: #e0e0e0;">
+                Ready to Plug
+              </div>
+            </div>
+
+            <!-- Gauge and Progress -->
+            <div class="gauge-wrapper">
+              <div class="battery-container">
+                <div class="battery-fill" id="v-battery-fill"></div>
+              </div>
+              <div>
+                <div class="battery-percent-display" id="v-battery-pct">34%</div>
+                <div style="font-size: 12.5px; color: #a0a0a0;" id="v-session-status">Gun unplugged. Insert connector to start.</div>
+              </div>
+            </div>
+
+            <!-- Live Metrics Row -->
+            <div class="live-metrics-row">
+              <div class="metric-cell">
+                <div class="metric-label">Live Power</div>
+                <div class="metric-val" id="v-power">0.0 <span style="font-size: 13px; font-weight: normal;">kW</span></div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-label">Energy Delivered</div>
+                <div class="metric-val" id="v-kwh">0.00 <span style="font-size: 13px; font-weight: normal;">kWh</span></div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-label">Voltage / Amps</div>
+                <div class="metric-val" id="v-voltage">0V / 0A</div>
+              </div>
+              <div class="metric-cell">
+                <div class="metric-label">Running Cost</div>
+                <div class="metric-val" id="v-cost">$0.00</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap;">
+              <button class="sim-action-btn" id="v-plug-btn" style="background: #ffffff; color: #000;">⚡ Plug In & Start Charging</button>
+              <button class="sim-action-btn" id="v-stop-btn" style="background: rgba(255,255,255,0.1); color: #ffffff; border: 1px solid rgba(255,255,255,0.2); display: none;">Stop & Generate Receipt</button>
+            </div>
+
+            <div id="v-receipt" style="display: none; margin-top: 16px; background: #0c0c0c; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6;">
+              <!-- Receipt populated via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Highway Route & Pit-Stop Planner -->
+        <div class="tab-content" id="tab-route">
+          <p style="font-size: 13.5px; color: #a0a0a0; margin-bottom: 16px;">
+            Eliminates trip anxiety by calculating optimal charging stops along national highway corridors.
+          </p>
+
+          <div class="sim-controls">
+            <div class="sim-field">
+              <label>Select Highway Corridor</label>
+              <select id="route-corridor">
+                <option value="corridor1">Delhi ⇄ Jaipur National Expressway (275 km)</option>
+                <option value="corridor2">Mumbai ⇄ Pune Expressway & Highway (155 km)</option>
+                <option value="corridor3">Bangalore ⇄ Chennai Golden Quadrilateral (345 km)</option>
+                <option value="corridor4">San Francisco ⇄ Lake Tahoe Sierra Corridor (320 km)</option>
+              </select>
+            </div>
+            <div class="sim-field">
+              <label>Starting Battery SOC</label>
+              <select id="route-start-soc">
+                <option value="100">100% (Fully Charged at Origin)</option>
+                <option value="75">75% (Suburban Departure)</option>
+                <option value="50">50% (Half Battery Departure)</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="sim-action-btn" id="generate-route-btn">Recalculate Optimal Itinerary</button>
+
+          <div class="route-timeline" id="route-timeline-container">
+            <!-- Timeline elements populated by JS -->
+          </div>
+        </div>
+
+        <!-- Tab 5: System Core Specification -->
+        <div class="tab-content" id="tab-overview">
+          <div class="team-grid">
+            <div class="team-box">
+              <h4 style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px;">1. Real-Time Telemetry & Status</h4>
+              <p class="team-desc">Live connector polling that displays exact stall availability, power outputs, and connector pinouts before you start driving.</p>
+            </div>
+            <div class="team-box">
+              <h4 style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px;">2. Advance Slot Booking</h4>
+              <p class="team-desc">Reserve your dedicated charging bay in advance. Lock down arrival slots to bypass queues during highway peak travel periods.</p>
+            </div>
+            <div class="team-box">
+              <h4 style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px;">3. AI Journey & Route Planner</h4>
+              <p class="team-desc">Integrates battery capacity, topology, and driving style to map out optimal charging pit-stops along your route.</p>
+            </div>
+            <div class="team-box">
+              <h4 style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px;">4. Centralized Operator Portal</h4>
+              <p class="team-desc">Empowers station owners with digital billing, dynamic tariff management, remote diagnostics, and queue load balancing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 4: FAQ -->
+    <div class="modal-layer" id="modal-faq" role="dialog" aria-modal="true" aria-labelledby="faq-title">
+      <div class="modal-card">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="modal-header">
+          <div class="modal-tag">Support & Answers</div>
+          <h2 class="modal-title" id="faq-title">Frequently Asked Questions</h2>
+          <p class="modal-subtitle">Clear answers on how our platform supports EV drivers and charging network operators.</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <div class="team-box">
+            <h4 style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 6px;">How does the system ensure slot availability upon arrival?</h4>
+            <p class="team-desc">When a slot is booked, the selected charging gun is digitally reserved in the station controller. An automated 15-minute grace period holds the stall exclusively for your vehicle with live navigation sync.</p>
+          </div>
+          <div class="team-box">
+            <h4 style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 6px;">Which vehicle connector standards are supported?</h4>
+            <p class="team-desc">The platform indexes CCS2 (Combined Charging System), Type 2 AC (Mennekes), CHAdeMO, and GB/T protocols across both two-wheelers, four-wheelers, and commercial fleet chargers.</p>
+          </div>
+          <div class="team-box">
+            <h4 style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 6px;">Can private station operators list their charging points?</h4>
+            <p class="team-desc">Yes. Operators can onboard via the Operator Dashboard with standard OCPP 1.6J/2.0.1 compliance, immediately receiving digital bookings and automated payouts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 5: Contact -->
+    <div class="modal-layer" id="modal-contact" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+      <div class="modal-card">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="modal-header">
+          <div class="modal-tag">Get in Touch</div>
+          <h2 class="modal-title" id="contact-title">Connect with the Team</h2>
+          <p class="modal-subtitle">Collaborate with Pawan Singh and Anmol Upadhyay on the EV Charging Project.</p>
+        </div>
+
+        <div class="team-grid" style="margin-bottom: 24px;">
+          <div class="team-box">
+            <div class="team-name">Pawan Singh</div>
+            <div class="team-role">Full Stack Developer & Project Lead</div>
+            <p class="team-desc" style="margin-top: 8px;">Email: <a href="mailto:pawan9140582015@gmail.com" style="color: #ffffff; text-decoration: underline;">pawan9140582015@gmail.com</a></p>
+          </div>
+          <div class="team-box">
+            <div class="team-name">Anmol Upadhyay</div>
+            <div class="team-role">Collaborator & Technology Enthusiast</div>
+            <p class="team-desc" style="margin-top: 8px;">Inquiries: Available for EV infrastructure and technology development.</p>
+          </div>
+        </div>
+
+        <form id="contact-form" onsubmit="event.preventDefault(); document.getElementById('contact-sent').style.display='block';">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div class="sim-field">
+              <label>Your Name</label>
+              <input type="text" placeholder="Alex Morgan" required />
+            </div>
+            <div class="sim-field">
+              <label>Your Email</label>
+              <input type="email" placeholder="alex@company.com" required />
+            </div>
+          </div>
+          <div class="sim-field" style="margin-bottom: 16px;">
+            <label>Message / Collaboration Topic</label>
+            <input type="text" placeholder="Inquiring about EV charging deployment or API access..." required />
+          </div>
+          <button type="submit" class="sim-action-btn">Send Message</button>
+          <div id="contact-sent" style="display:none; margin-top: 14px; color: #48bb78; font-size: 14px;">Thank you! Your message has been sent to Pawan Singh & Anmol Upadhyay.</div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 6: Get Started -->
+    <div class="modal-layer" id="modal-get-started" role="dialog" aria-modal="true" aria-labelledby="start-title">
+      <div class="modal-card">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="modal-header">
+          <div class="modal-tag">Deployment & Onboarding</div>
+          <h2 class="modal-title" id="start-title">Join the EV Charging Network</h2>
+          <p class="modal-subtitle">Choose your portal pathway to begin experiencing seamless charging management.</p>
+        </div>
+
+        <div class="team-grid">
+          <div class="team-box" style="cursor: pointer;" onclick="document.querySelector('a[href=\'#features\']').click(); document.querySelector('[data-tab=\'tab-locator\']').click();">
+            <h3 style="font-size: 18px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">For EV Owners & Drivers</h3>
+            <p class="team-desc">Discover nearby high-speed chargers, view live gun availability, and book slots in advance.</p>
+            <div style="margin-top: 16px; font-size: 14px; font-weight: 500; color: #ffffff;">Launch Station Locator →</div>
+          </div>
+          <div class="team-box" style="cursor: pointer;" onclick="document.querySelector('a[href=\'#contact\']').click();">
+            <h3 style="font-size: 18px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">For Station Operators</h3>
+            <p class="team-desc">Integrate your OCPP chargers, track revenue, eliminate manual logs, and increase utilization rates.</p>
+            <div style="margin-top: 16px; font-size: 14px; font-weight: 500; color: #ffffff;">Partner with Pawan & Anmol →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         SCRIPTS (Self-contained, minimal JS)
+         Burger toggle, modal handling, telemetry stream,
+         Range calculator, Virtual Charger, Route Planner
+         ════════════════════════════════════════ -->
+    <script>
+      (function () {
+        const stage = document.getElementById('stage');
+        const burger = document.getElementById('burger');
+        const menu = document.getElementById('menu');
+
+        // Toggle mobile drawer
+        function toggleMenu(force) {
+          const isOpen = typeof force === 'boolean' ? force : !stage.classList.contains('is-open');
+          stage.classList.toggle('is-open', isOpen);
+          burger.setAttribute('aria-expanded', String(isOpen));
+          menu.setAttribute('aria-hidden', String(!isOpen));
+          burger.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Toggle navigation menu');
+        }
+
+        if (burger) {
+          burger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+          });
+        }
+
+        // Close on window resize to landscape
+        window.addEventListener('resize', () => {
+          if (window.innerWidth / window.innerHeight > 1.1) {
+            toggleMenu(false);
+          }
+        });
+
+        // Modal routing
+        const modalLayers = document.querySelectorAll('.modal-layer');
+        function closeModal() {
+          modalLayers.forEach((m) => m.classList.remove('active'));
+          history.pushState('', document.title, window.location.pathname + window.location.search);
+        }
+
+        function openModalById(id) {
+          toggleMenu(false);
+          const modal = document.getElementById('modal-' + id);
+          if (modal) {
+            modalLayers.forEach((m) => m.classList.remove('active'));
+            modal.classList.add('active');
+          }
+        }
+
+        function handleHash() {
+          const hash = window.location.hash.replace('#', '');
+          if (['about', 'architecture', 'features', 'faq', 'contact', 'get-started'].includes(hash)) {
+            openModalById(hash);
+          } else {
+            closeModal();
+          }
+        }
+
+        window.addEventListener('hashchange', handleHash);
+        if (window.location.hash) {
+          handleHash();
+        }
+
+        document.querySelectorAll('.modal-close').forEach((btn) => {
+          btn.addEventListener('click', closeModal);
+        });
+
+        modalLayers.forEach((layer) => {
+          layer.addEventListener('click', (e) => {
+            if (e.target === layer) {
+              closeModal();
+            }
+          });
+        });
+
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            toggleMenu(false);
+            closeModal();
+          }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach((link) => {
+          link.addEventListener('click', (e) => {
+            const target = link.getAttribute('href').replace('#', '');
+            if (['about', 'architecture', 'features', 'faq', 'contact', 'get-started'].includes(target)) {
+              e.preventDefault();
+              openModalById(target);
+            }
+          });
+        });
+
+        // Tabs in Features modal
+        const tabBtns = document.querySelectorAll('.modal-tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            tabBtns.forEach((b) => b.classList.remove('active'));
+            tabContents.forEach((c) => c.classList.remove('active'));
+            btn.classList.add('active');
+            const targetId = btn.getAttribute('data-tab');
+            const target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+          });
+        });
+
+        // Floating Telemetry Pill opens live station grid
+        const pill = document.getElementById('live-telemetry-pill');
+        if (pill) {
+          pill.addEventListener('click', () => {
+            openModalById('features');
+            const locatorTab = document.querySelector('[data-tab="tab-locator"]');
+            if (locatorTab) locatorTab.click();
+          });
+        }
+
+        // ════════════════════════════════════════
+        // REAL-TIME DATA ENGINE: LIVE STATION TELEMETRY
+        // ════════════════════════════════════════
+        const stationsData = [
+          {
+            id: 'st-1',
+            name: 'Metro Hub Central',
+            distance: 1.2,
+            type: 'ccs2',
+            speedKw: 150,
+            tariff: 0.22,
+            totalGuns: 6,
+            freeGuns: 4,
+            guns: [
+              { id: 'G1', type: 'CCS2', kw: 150, status: 'free' },
+              { id: 'G2', type: 'CCS2', kw: 150, status: 'busy', timeRemaining: 12 },
+              { id: 'G3', type: 'CCS2', kw: 120, status: 'free' },
+              { id: 'G4', type: 'CCS2', kw: 60, status: 'free' },
+              { id: 'G5', type: 'Type 2', kw: 22, status: 'free' },
+              { id: 'G6', type: 'Type 2', kw: 22, status: 'busy', timeRemaining: 45 }
+            ]
+          },
+          {
+            id: 'st-2',
+            name: 'Expressway GreenGrid Plaza',
+            distance: 3.8,
+            type: 'ccs2',
+            speedKw: 120,
+            tariff: 0.21,
+            totalGuns: 4,
+            freeGuns: 1,
+            guns: [
+              { id: 'G1', type: 'CCS2', kw: 120, status: 'busy', timeRemaining: 8 },
+              { id: 'G2', type: 'CCS2', kw: 60, status: 'free' },
+              { id: 'G3', type: 'Type 2', kw: 22, status: 'busy', timeRemaining: 34 },
+              { id: 'G4', type: 'CHAdeMO', kw: 50, status: 'busy', timeRemaining: 19 }
+            ]
+          },
+          {
+            id: 'st-3',
+            name: 'Cyber Park Tech Hub',
+            distance: 5.4,
+            type: 'ccs2',
+            speedKw: 240,
+            tariff: 0.26,
+            totalGuns: 8,
+            freeGuns: 6,
+            guns: [
+              { id: 'G1', type: 'CCS2', kw: 240, status: 'free' },
+              { id: 'G2', type: 'CCS2', kw: 240, status: 'free' },
+              { id: 'G3', type: 'CCS2', kw: 150, status: 'busy', timeRemaining: 15 },
+              { id: 'G4', type: 'CCS2', kw: 150, status: 'free' },
+              { id: 'G5', type: 'CCS2', kw: 120, status: 'free' },
+              { id: 'G6', type: 'CCS2', kw: 60, status: 'free' },
+              { id: 'G7', type: 'Type 2', kw: 22, status: 'free' },
+              { id: 'G8', type: 'Type 2', kw: 22, status: 'busy', timeRemaining: 55 }
+            ]
+          },
+          {
+            id: 'st-4',
+            name: 'Terminal 2 Airport HyperCharge',
+            distance: 8.9,
+            type: 'ccs2',
+            speedKw: 350,
+            tariff: 0.28,
+            totalGuns: 6,
+            freeGuns: 3,
+            guns: [
+              { id: 'G1', type: 'CCS2', kw: 350, status: 'free' },
+              { id: 'G2', type: 'CCS2', kw: 350, status: 'busy', timeRemaining: 6 },
+              { id: 'G3', type: 'CCS2', kw: 150, status: 'free' },
+              { id: 'G4', type: 'CCS2', kw: 150, status: 'free' },
+              { id: 'G5', type: 'Type 2', kw: 22, status: 'busy', timeRemaining: 70 },
+              { id: 'G6', type: 'CHAdeMO', kw: 50, status: 'busy', timeRemaining: 22 }
+            ]
+          }
+        ];
+
+        let selectedStationId = 'st-1';
+
+        function renderStations() {
+          const container = document.getElementById('dynamic-station-list');
+          if (!container) return;
+
+          const filterVal = document.getElementById('sim-connector-filter')?.value || 'all';
+          const sortVal = document.getElementById('sim-sort')?.value || 'distance';
+
+          let list = [...stationsData];
+
+          if (filterVal !== 'all') {
+            list = list.filter((s) => s.guns.some((g) => g.type.toLowerCase().includes(filterVal)));
+          }
+
+          if (sortVal === 'distance') list.sort((a, b) => a.distance - b.distance);
+          if (sortVal === 'available') list.sort((a, b) => b.freeGuns - a.freeGuns);
+          if (sortVal === 'speed') list.sort((a, b) => b.speedKw - a.speedKw);
+          if (sortVal === 'tariff') list.sort((a, b) => a.tariff - b.tariff);
+
+          container.innerHTML = list
+            .map((st) => {
+              const isSelected = st.id === selectedStationId;
+              const statusClass = st.freeGuns > 2 ? '' : st.freeGuns > 0 ? 'busy' : 'offline';
+              return `
+              <div class="station-card ${isSelected ? 'selected' : ''}" data-id="${st.id}">
+                <div class="station-name">
+                  <span>${st.name}</span>
+                  <span class="station-distance">${st.distance} km • ~${Math.round(st.distance * 2.8)}m drive</span>
+                </div>
+                <div class="station-status">
+                  <span class="status-dot ${statusClass}"></span>
+                  <strong style="color: ${st.freeGuns > 0 ? '#ffffff' : '#f56565'};">${st.freeGuns} of ${st.totalGuns} Guns Available</strong>
+                </div>
+                <div style="font-size: 11.5px; color: #a0a0a0; margin-top: 6px;">
+                  Max ${st.speedKw} kW • $${st.tariff.toFixed(2)} / kWh • Amenities: WiFi, Cafe, Restroom
+                </div>
+                <div class="guns-bar">
+                  ${st.guns
+                    .slice(0, 4)
+                    .map(
+                      (g) => `
+                    <div class="gun-pill ${g.status === 'free' ? 'free' : 'busy'}">
+                      ${g.id}: ${g.kw}kW ${g.status === 'free' ? '✓ Free' : g.timeRemaining + 'm'}
+                    </div>
+                  `
+                    )
+                    .join('')}
+                </div>
+              </div>
+            `;
+            })
+            .join('');
+
+          // Bind card selection
+          container.querySelectorAll('.station-card').forEach((card) => {
+            card.addEventListener('click', () => {
+              selectedStationId = card.getAttribute('data-id');
+              renderStations();
+            });
+          });
+        }
+
+        renderStations();
+
+        document.getElementById('sim-connector-filter')?.addEventListener('change', renderStations);
+        document.getElementById('sim-sort')?.addEventListener('change', renderStations);
+
+        // Advance reservation click
+        const advBtn = document.getElementById('confirm-reservation-btn');
+        const advResult = document.getElementById('adv-booking-result');
+        if (advBtn && advResult) {
+          advBtn.addEventListener('click', () => {
+            const st = stationsData.find((s) => s.id === selectedStationId) || stationsData[0];
+            const timeVal = document.getElementById('adv-time').value;
+            const vehVal = document.getElementById('adv-vehicle').value;
+            const pin = Math.floor(1000 + Math.random() * 9000);
+            const passId = 'EV-PASS-' + Math.floor(100000 + Math.random() * 900000);
+
+            advResult.innerHTML = `
+              <div style="font-size: 14px; font-weight: 600; color: #68d391; margin-bottom: 6px;">✓ Bay Successfully Reserved!</div>
+              <div><strong>Station:</strong> ${st.name} (Bay #02, CCS2 150kW Gun)</div>
+              <div><strong>Vehicle:</strong> ${vehVal}</div>
+              <div><strong>Window:</strong> ${timeVal}</div>
+              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <strong>Digital Access PIN:</strong> <code style="background: rgba(0,0,0,0.4); padding: 3px 8px; border-radius: 4px; font-size: 14px;">${pin}</code>
+                • Pass: <code>${passId}</code>
+              </div>
+              <div style="font-size: 11.5px; color: #a0a0a0; margin-top: 6px;">
+                ⚡ Your bay is digitally locked for 15 minutes post arrival time. Live charger communication verified.
+              </div>
+            `;
+            advResult.style.display = 'block';
+          });
+        }
+
+        // Live telemetry periodic simulator (simulates real EV network activity)
+        const telemetryFeed = [
+          'Live: Bay 3 at Metro Hub Central is now Available • Grid Tariff: $0.22/kWh (Off-Peak)',
+          'Live: Tata Nexon EV finished charging at Expressway Plaza • 120kW Gun freed',
+          'Live: Grid demand normal • 18/24 Fast charging bays free across network',
+          'Live: Cyber Park Tech Hub 240kW Ultra-Fast bay open • Zero queue time',
+          'Live: Terminal 2 Airport HyperCharger Gun #1 online • 350kW 800V ready'
+        ];
+        let feedIdx = 0;
+        setInterval(() => {
+          feedIdx = (feedIdx + 1) % telemetryFeed.length;
+          const label = document.getElementById('telemetry-live-text');
+          if (label) label.textContent = telemetryFeed[feedIdx];
+
+          // randomly flip a gun status to give a real living feel
+          const rSt = stationsData[Math.floor(Math.random() * stationsData.length)];
+          const rG = rSt.guns[Math.floor(Math.random() * rSt.guns.length)];
+          if (rG.status === 'busy') {
+            rG.status = 'free';
+            rSt.freeGuns = Math.min(rSt.totalGuns, rSt.freeGuns + 1);
+          } else {
+            rG.status = 'busy';
+            rG.timeRemaining = Math.floor(10 + Math.random() * 25);
+            rSt.freeGuns = Math.max(0, rSt.freeGuns - 1);
+          }
+          renderStations();
+        }, 5500);
+
+        // ════════════════════════════════════════
+        // FEATURE 2: RANGE ANXIETY & CHARGE CALCULATOR
+        // ════════════════════════════════════════
+        function updateRangeCalc() {
+          const select = document.getElementById('calc-ev-model');
+          if (!select) return;
+          const opt = select.selectedOptions[0];
+          const totalBattery = parseFloat(opt.getAttribute('data-battery'));
+          const maxRange = parseFloat(opt.getAttribute('data-range'));
+
+          const tempFactor = parseFloat(document.getElementById('calc-temp')?.value || '1.0');
+          const currentSoc = parseInt(document.getElementById('soc-current-slider')?.value || '18');
+          const targetSoc = parseInt(document.getElementById('soc-target-slider')?.value || '80');
+
+          // ensure target > current
+          const effectiveTarget = Math.max(currentSoc + 1, targetSoc);
+
+          const curValEl = document.getElementById('soc-current-val');
+          const targetValEl = document.getElementById('soc-target-val');
+          if (curValEl) curValEl.textContent = currentSoc + '%';
+          if (targetValEl) targetValEl.textContent = effectiveTarget + '%' + (effectiveTarget === 80 ? ' (Optimal Life)' : '');
+
+          const deltaPct = effectiveTarget - currentSoc;
+          const kwhNeeded = (deltaPct / 100) * totalBattery;
+          const addedKm = Math.round((deltaPct / 100) * maxRange * tempFactor);
+          const cost = kwhNeeded * 0.22;
+          const co2Saved = (addedKm * 0.142).toFixed(1); // 142g CO2/km typical gas car
+
+          const addedKmEl = document.getElementById('calc-added-km');
+          const kwhEl = document.getElementById('calc-kwh-needed');
+          const costEl = document.getElementById('calc-cost');
+          const co2El = document.getElementById('calc-co2');
+
+          if (addedKmEl) addedKmEl.innerHTML = `${addedKm}<span class="stat-unit">km</span>`;
+          if (kwhEl) kwhEl.textContent = `${kwhNeeded.toFixed(1)} kWh`;
+          if (costEl) costEl.innerHTML = `$${cost.toFixed(2)}<span class="stat-unit">USD</span>`;
+          if (co2El) co2El.textContent = `${co2Saved} kg`;
+
+          // Charging time calculations
+          const t150 = Math.max(12, Math.round((kwhNeeded / 110) * 60)); // average tapered rate
+          const t50 = Math.max(18, Math.round((kwhNeeded / 45) * 60));
+          const t22 = Math.round((kwhNeeded / 20) * 60);
+          const t7 = Math.round((kwhNeeded / 7.2) * 60);
+
+          const el150 = document.getElementById('time-150kw');
+          const el50 = document.getElementById('time-50kw');
+          const el22 = document.getElementById('time-22kw');
+          const el7 = document.getElementById('time-7kw');
+
+          if (el150) el150.textContent = `${t150} mins`;
+          if (el50) el50.textContent = `${t50} mins`;
+          if (el22) el22.textContent = t22 > 60 ? `${Math.floor(t22 / 60)}h ${t22 % 60}m` : `${t22} mins`;
+          if (el7) el7.textContent = `${Math.floor(t7 / 60)}h ${t7 % 60}m`;
+        }
+
+        document.getElementById('calc-ev-model')?.addEventListener('change', updateRangeCalc);
+        document.getElementById('calc-temp')?.addEventListener('change', updateRangeCalc);
+        document.getElementById('soc-current-slider')?.addEventListener('input', updateRangeCalc);
+        document.getElementById('soc-target-slider')?.addEventListener('input', updateRangeCalc);
+        updateRangeCalc();
+
+        // ════════════════════════════════════════
+        // FEATURE 3: VIRTUAL LIVE CHARGER SIMULATOR
+        // ════════════════════════════════════════
+        let isCharging = false;
+        let chargeInterval = null;
+        let vSoc = 34;
+        let vEnergy = 0.0;
+        let vCost = 0.0;
+
+        const plugBtn = document.getElementById('v-plug-btn');
+        const stopBtn = document.getElementById('v-stop-btn');
+        const batteryFill = document.getElementById('v-battery-fill');
+        const batteryPct = document.getElementById('v-battery-pct');
+        const sessionStatus = document.getElementById('v-session-status');
+        const badge = document.getElementById('session-badge');
+        const receipt = document.getElementById('v-receipt');
+
+        const vPower = document.getElementById('v-power');
+        const vKwh = document.getElementById('v-kwh');
+        const vVolt = document.getElementById('v-voltage');
+        const vCostEl = document.getElementById('v-cost');
+
+        if (plugBtn && stopBtn) {
+          plugBtn.addEventListener('click', () => {
+            isCharging = true;
+            plugBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+            if (receipt) receipt.style.display = 'none';
+
+            badge.textContent = 'Charging In Progress';
+            badge.style.color = '#48bb78';
+            badge.style.borderColor = 'rgba(72,187,120,0.5)';
+            sessionStatus.textContent = 'Active DC Fast Session. Peak charging rate delivered.';
+
+            chargeInterval = setInterval(() => {
+              if (vSoc >= 95) {
+                stopCharging();
+                return;
+              }
+
+              // Realistic charging curve: taper after 80%
+              let currentKw = vSoc < 70 ? 122 + Math.random() * 6 : vSoc < 85 ? 78 + Math.random() * 4 : 34 + Math.random() * 3;
+              vSoc += 1;
+              vEnergy += currentKw / 3600 * 5; // increment
+              vCost = vEnergy * 0.24;
+
+              if (batteryFill) batteryFill.style.width = vSoc + '%';
+              if (batteryPct) batteryPct.textContent = vSoc + '%';
+              if (vPower) vPower.innerHTML = `${currentKw.toFixed(1)} <span style="font-size:13px; font-weight:normal;">kW</span>`;
+              if (vKwh) vKwh.innerHTML = `${vEnergy.toFixed(2)} <span style="font-size:13px; font-weight:normal;">kWh</span>`;
+              if (vVolt) vVolt.textContent = `${Math.round(398 + Math.random() * 4)}V / ${Math.round(currentKw * 2.5)}A`;
+              if (vCostEl) vCostEl.textContent = `$${vCost.toFixed(2)}`;
+            }, 600);
+          });
+
+          function stopCharging() {
+            clearInterval(chargeInterval);
+            isCharging = false;
+            plugBtn.style.display = 'inline-block';
+            plugBtn.textContent = '⚡ Resume / Start New Session';
+            stopBtn.style.display = 'none';
+
+            badge.textContent = 'Session Complete';
+            badge.style.color = '#ffffff';
+            badge.style.borderColor = 'rgba(255,255,255,0.2)';
+            sessionStatus.textContent = `Completed at ${vSoc}%. Connector safely unlocked.`;
+
+            if (receipt) {
+              const invoiceId = 'INV-' + Math.floor(100000 + Math.random() * 900000);
+              receipt.innerHTML = `
+                <div style="font-size: 14.5px; font-weight: 600; color: #ffffff; margin-bottom: 8px;">🧾 Charging Session Summary & Tax Invoice</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                  <span>Invoice Reference:</span>
+                  <strong>${invoiceId}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                  <span>Energy Delivered:</span>
+                  <strong>${vEnergy.toFixed(2)} kWh</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                  <span>Base Tariff:</span>
+                  <span>$0.24 / kWh</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                  <span>Final SOC:</span>
+                  <span style="color:#48bb78; font-weight:600;">${vSoc}% (+${vSoc - 34}% added)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-top: 8px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 15px;">
+                  <strong>Total Paid:</strong>
+                  <strong style="color: #ffffff;">$${vCost.toFixed(2)} USD</strong>
+                </div>
+              `;
+              receipt.style.display = 'block';
+            }
+          }
+
+          stopBtn.addEventListener('click', stopCharging);
+        }
+
+        // ════════════════════════════════════════
+        // FEATURE 4: HIGHWAY ROUTE PLANNER
+        // ════════════════════════════════════════
+        const routesData = {
+          corridor1: {
+            title: 'Delhi ⇄ Jaipur National Expressway (275 km)',
+            stops: [
+              { name: 'Departure: Delhi Dhaula Kuan', soc: '100%', note: 'Full battery (437 km range capacity)', isCharge: false },
+              { name: 'Midway Pit-Stop: Neemrana Expressway Plaza (Km 124)', soc: '68% → 90%', note: '22 min high-speed stop (150kW CCS2). Restroom & coffee.', isCharge: true },
+              { name: 'Arrival: Jaipur Ajmer Road', soc: '62% Reserve', note: 'No range anxiety, plenty of reserve for city travel.', isCharge: false }
+            ]
+          },
+          corridor2: {
+            title: 'Mumbai ⇄ Pune Expressway & Highway (155 km)',
+            stops: [
+              { name: 'Departure: Mumbai Navi Mumbai Point', soc: '90%', note: 'Battery conditioned for ghat climb', isCharge: false },
+              { name: 'Ghat Foothill Stop: Khalapur FastCharge (Km 62)', soc: '65% → 85%', note: '14 min quick top-up before elevation gradient.', isCharge: true },
+              { name: 'Arrival: Pune Baner Hub', soc: '64% Reserve', note: 'Smooth transition with zero battery stress.', isCharge: false }
+            ]
+          },
+          corridor3: {
+            title: 'Bangalore ⇄ Chennai Golden Quadrilateral (345 km)',
+            stops: [
+              { name: 'Departure: Bangalore Electronic City', soc: '100%', note: 'Beginning inter-state highway journey', isCharge: false },
+              { name: 'Stop 1: Krishnagiri Plaza (Km 92)', soc: '74% → 92%', note: '18 min coffee & quick burst charge', isCharge: true },
+              { name: 'Stop 2: Vellore Bypass HyperCharge (Km 215)', soc: '58% → 85%', note: '20 min top-up. 120kW CCS2.', isCharge: true },
+              { name: 'Arrival: Chennai Guindy Central', soc: '54% Reserve', note: 'Arrived with over 180 km remaining.', isCharge: false }
+            ]
+          },
+          corridor4: {
+            title: 'San Francisco ⇄ Lake Tahoe Sierra Corridor (320 km)',
+            stops: [
+              { name: 'Departure: SF Bay Bridge Point', soc: '100%', note: 'Starting mountain climb route', isCharge: false },
+              { name: 'Sacramento Capital Fast Hub (Km 140)', soc: '62% → 88%', note: '20 min pit-stop before alpine ascent.', isCharge: true },
+              { name: 'Truckee High Sierra Station (Km 290)', soc: '42% → 75%', note: '15 min battery warm-up & buffer charge.', isCharge: true },
+              { name: 'Arrival: Lake Tahoe Village', soc: '68% Reserve', note: 'Optimal battery temperature maintained.', isCharge: false }
+            ]
+          }
+        };
+
+        function renderRoute() {
+          const container = document.getElementById('route-timeline-container');
+          if (!container) return;
+          const key = document.getElementById('route-corridor')?.value || 'corridor1';
+          const r = routesData[key] || routesData.corridor1;
+
+          container.innerHTML = r.stops
+            .map(
+              (s) => `
+            <div class="timeline-stop ${s.isCharge ? 'charge' : ''}">
+              <div class="stop-title">${s.name}</div>
+              <div style="font-size: 13px; color: ${s.isCharge ? '#68d391' : '#ffffff'}; font-weight: 500; margin-top: 2px;">
+                State of Charge: ${s.soc}
+              </div>
+              <div class="stop-desc">${s.note}</div>
+            </div>
+          `
+            )
+            .join('');
+        }
+
+        document.getElementById('generate-route-btn')?.addEventListener('click', renderRoute);
+        document.getElementById('route-corridor')?.addEventListener('change', renderRoute);
+        renderRoute();
+      })();
+    </script>
+  </body>
+</html>
